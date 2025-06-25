@@ -102,6 +102,8 @@
   zh_date: [#datetime.today().display("[month repr:long] [year]")],
   // english date
   en_date: [#datetime.today().display("[month repr:long] [year]")],
+  // Photocopied “Oral Defense Committee Signature Form”
+  signature: none,
   // chinese abstract content, none to disable
   zh_abstract: none,
   // english abstract content, none to disable
@@ -196,6 +198,20 @@
       zh_date: zh_date, en_date: en_date)
   }
 
+  if signature != none {
+    page(margin: 0pt, {
+      grid(columns: (1fr, auto, 1fr), rows: (1fr, auto, 1fr),
+        [], [], [],
+        [], align(center, block(width: 100%, height: 100% - 1pt, clip: true, {
+          v(1fr)
+          signature
+          v(1fr)
+        })), [],
+        [], [], []
+      )
+    })
+  }
+  
   counter(page).update(1)
   set page(numbering: "i")
   // abstract
