@@ -4,12 +4,66 @@
 #let A4_content_size = (width: 210mm - 5cm, height: 297mm - 5.25cm)
 #let watermark = image("logo/watermark.png", width: 64%)
 
+#let zh_date(
+  datetime,
+  use_roc_year: true,
+  prefix: "",
+  enable_year: true,
+  year_suffix: "年",
+  enable_month: true,
+  month_suffix: "月",
+  enable_day: true,
+  day_suffix: "日"
+) = {
+  let year = datetime.year()
+  let month = datetime.month()
+  let day = datetime.day()
+  if use_roc_year {  year -= 1911 }
+  let out = prefix
+  if enable_year { out += numbering("一", year) + year_suffix }
+  if enable_month { out += numbering("一", month) + month_suffix }
+  if enable_day { out += numbering("一", day) + day_suffix }
+  return out
+}
+
+#let semester_to_chinese(
+  datetime,
+  use_roc_year: true,
+  enable_year: true
+) = {
+  let year = datetime.year()
+  let month = datetime.month()
+  if month < 8 { year -= 1 }
+  if use_roc_year { year -= 1911 }
+  
+  let c_semester = numbering("一", year) + "學年度 "
+
+  c_semester += "第"
+  if month < 8 { c_semester += "二" }
+  else { c_semester += "一" }
+  c_semester += "學期"
+
+  return c_semester
+}
+
+#let minguo_year_month(
+  datetime
+) = {
+  let year = datetime.year()
+  let month = datetime.month()
+
+  let c_year = "中華民國" + numbering("一", year - 1911) + "年"
+  let c_month = numbering("一", month) + "月"
+
+  return c_year + c_month
+}
+
 #let title_page(
   has_watermark_background: true, zh_department: "？？？？？系？？班",
   en_department: "Department of ????", zh_degree: "？？", en_degree: "??",
   zh_title: none, en_title: none, zh_researcher: none, en_researcher: none,
-  zh_advisor: none, en_advisor: none, zh_date: none,
-  en_date: [#datetime.today().display("[month repr:long] [year]")],
+  zh_advisor: none, en_advisor: none,
+  date: [#datetime.today().display("[month repr:long] [year]")]
 ) = context {
   // page before content
   let title_en_degree = if en_degree != none { en_degree + " Thesis" } else { "" }
@@ -17,7 +71,6 @@
   let title_en_author = if en_researcher != none { "Researcher: " + en_researcher } else { none }
   let title_zh_advisor = if zh_advisor != none { "指導教授：" + zh_advisor + " 博士" } else { none }
   let title_en_advisor = if en_advisor != none { "Advisor: " + en_advisor + ", Ph.D." } else { none }
-  let date = if en_date != none { en_date } else { zh_date }
   page(background: if has_watermark_background { watermark } else { none }, {
     set align(center)
     set par(leading: 0.65em)
@@ -99,11 +152,9 @@
   // advisor english name, set none to disable
   en_advisor: none,
   // chinese date
-  zh_date: [#datetime.today().display("[month repr:long] [year]")],
+  zh_date: [#minguo_year_month(datetime.today())],
   // english date
   en_date: [#datetime.today().display("[month repr:long] [year]")],
-  // Photocopied “Oral Defense Committee Signature Form”
-  signature: none,
   // chinese abstract content, none to disable
   zh_abstract: none,
   // english abstract content, none to disable
@@ -178,14 +229,17 @@
     text(12pt, linebreak())
   }
   show heading.where(level: 1): align.with(center)
+  show figure.where(kind: image): set figure(supplement: if use_en { "Figure" } else { "圖" })
+  show figure.where(kind: table): set figure(supplement: if use_en { "Table" } else { "表" })
 
+  let date = if use_en { en_date } else { zh_date }
   if not only_content {
     if full {
       title_page(has_watermark_background: false, zh_department: zh_department,
         en_department: en_department, zh_degree: zh_degree, en_degree: en_degree,
         zh_title: zh_title, en_title: en_title, zh_researcher: zh_researcher,
         en_researcher: en_researcher, zh_advisor: zh_advisor, en_advisor: en_advisor,
-        zh_date: zh_date, en_date: en_date)
+        date: date)
   
       page(background: none)[] // blank page
     }
@@ -195,21 +249,7 @@
       en_department: en_department, zh_degree: zh_degree, en_degree: en_degree,
       zh_title: zh_title, en_title: en_title, zh_researcher: zh_researcher,
       en_researcher: en_researcher, zh_advisor: zh_advisor, en_advisor: en_advisor,
-      zh_date: zh_date, en_date: en_date)
-  }
-
-  if signature != none {
-    page(margin: 0pt, {
-      grid(columns: (1fr, auto, 1fr), rows: (1fr, auto, 1fr),
-        [], [], [],
-        [], align(center, block(width: 100%, height: 100% - 1pt, clip: true, {
-          v(1fr)
-          signature
-          v(1fr)
-        })), [],
-        [], [], []
-      )
-    })
+      date: date)
   }
   
   counter(page).update(1)
@@ -306,7 +346,8 @@
   set math.equation(numbering: "(1)")
   set enum(full: true, numbering: (..nums) => {
     let size = nums.pos().len()
-    return numbering(enum_numbering.at(size - 1), nums.at(-1))
+    let numbering_idx = calc.rem(size - 1, enum_numbering.len())
+    return numbering(enum_numbering.at(numbering_idx), nums.at(-1))
   })
 
   counter(page).update(1)
@@ -317,46 +358,4 @@
       bibliography(ref_bib, style: bib_style, title: [Reference])
     }
   ]
-}
-
-#let zh_date(
-  datetime,
-  use_roc_year: true,
-  prefix: "",
-  enable_year: true,
-  year_suffix: "年",
-  enable_month: true,
-  month_suffix: "月",
-  enable_day: true,
-  day_suffix: "日"
-) = {
-  let year = datetime.year()
-  let month = datetime.month()
-  let day = datetime.day()
-  if use_roc_year {  year -= 1911 }
-  let out = prefix
-  if enable_year { out += numbering("一", year) + year_suffix }
-  if enable_month { out += numbering("一", month) + month_suffix }
-  if enable_day { out += numbering("一", day) + day_suffix }
-  return out
-}
-
-#let semester_to_chinese(
-  datetime,
-  use_roc_year: true,
-  enable_year: true
-) = {
-  let year = datetime.year()
-  let month = datetime.month()
-  if month < 8 { year -= 1 }
-  if use_roc_year { year -= 1911 }
-  
-  let c_semester = numbering("一", year) + "學年度 "
-
-  c_semester += "第"
-  if month < 8 { c_semester += "二" }
-  else { c_semester += "一" }
-  c_semester += "學期"
-
-  return c_semester
 }

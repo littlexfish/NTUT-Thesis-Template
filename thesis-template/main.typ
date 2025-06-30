@@ -64,11 +64,9 @@
   // advisor english name, set none to disable
   en_advisor: "Advisor",
   // chinese date
-  zh_date: [#semester_to_chinese(datetime.today())],
+  zh_date: [#minguo_year_month(datetime.today())],
   // english date
   en_date: [#datetime.today().display("[month repr:long] [year]")],
-  // Photocopied “Oral Defense Committee Signature Form”
-  signature: none,
   // chinese abstract content, none to disable
   zh_abstract: zh_abstract,
   // english abstract content, none to disable
