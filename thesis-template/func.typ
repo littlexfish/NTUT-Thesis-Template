@@ -79,13 +79,13 @@
     // school name
     // department & degree
     {
-      zh_department
+      strong(text(24pt, zh_department))
       linebreak()
-      en_degree + " Thesis"
+      strong(text(24pt, zh_degree + "學位論文"))
       linebreak()
-      en_department
+      strong(text(18pt, en_department))
       linebreak()
-      zh_degree + "學位論文"
+      strong(text(18pt, en_degree + " Thesis"))
     }
     v(1fr)
     // title
