@@ -1,77 +1,77 @@
 
 #let margin = (x: 2.5cm, top: 2.5cm, bottom: 2.75cm)
 #let A4 = (width: 210mm, height: 297mm)
-#let A4_content_size = (width: 210mm - 5cm, height: 297mm - 5.25cm)
+#let A4-content-size = (width: 210mm - 5cm, height: 297mm - 5.25cm)
 #let watermark = image("logo/watermark.png", width: 64%)
 
-#let zh_date(
+#let zh-date(
   datetime,
-  use_roc_year: true,
+  use-roc-year: true,
   prefix: "",
-  enable_year: true,
-  year_suffix: "年",
-  enable_month: true,
-  month_suffix: "月",
-  enable_day: true,
-  day_suffix: "日"
+  enable-year: true,
+  year-suffix: "年",
+  enable-month: true,
+  month-suffix: "月",
+  enable-day: true,
+  day-suffix: "日"
 ) = {
   let year = datetime.year()
   let month = datetime.month()
   let day = datetime.day()
-  if use_roc_year {  year -= 1911 }
+  if use-roc-year {  year -= 1911 }
   let out = prefix
-  if enable_year { out += numbering("一", year) + year_suffix }
-  if enable_month { out += numbering("一", month) + month_suffix }
-  if enable_day { out += numbering("一", day) + day_suffix }
+  if enable-year { out += numbering("一", year) + year-suffix }
+  if enable-month { out += numbering("一", month) + month-suffix }
+  if enable-day { out += numbering("一", day) + day-suffix }
   return out
 }
 
-#let semester_to_chinese(
+#let semester-to-chinese(
   datetime,
-  use_roc_year: true,
-  enable_year: true
+  use-roc-year: true,
+  enable-year: true
 ) = {
   let year = datetime.year()
   let month = datetime.month()
   if month < 8 { year -= 1 }
-  if use_roc_year { year -= 1911 }
+  if use-roc-year { year -= 1911 }
   
-  let c_semester = numbering("一", year) + "學年度 "
+  let c-semester = numbering("一", year) + "學年度 "
 
-  c_semester += "第"
-  if month < 8 { c_semester += "二" }
-  else { c_semester += "一" }
-  c_semester += "學期"
+  c-semester += "第"
+  if month < 8 { c-semester += "二" }
+  else { c-semester += "一" }
+  c-semester += "學期"
 
-  return c_semester
+  return c-semester
 }
 
-#let minguo_year_month(
+#let minguo-year-month(
   datetime
 ) = {
   let year = datetime.year()
   let month = datetime.month()
 
-  let c_year = "中華民國" + numbering("一", year - 1911) + "年"
-  let c_month = numbering("一", month) + "月"
+  let c-year = "中華民國" + numbering("一", year - 1911) + "年"
+  let c-month = numbering("一", month) + "月"
 
-  return c_year + c_month
+  return c-year + c-month
 }
 
-#let title_page(
-  has_watermark_background: true, zh_department: "？？？？？系？？班",
-  en_department: "Department of ????", zh_degree: "？？", en_degree: "??",
-  zh_title: none, en_title: none, zh_researcher: none, en_researcher: none,
-  zh_advisor: none, en_advisor: none,
+#let title-page(
+  has-watermark-background: true, zh-department: "？？？？？系？？班",
+  en-department: "Department of ????", zh-degree: "？？", en-degree: "??",
+  zh-title: none, en-title: none, zh-researcher: none, en-researcher: none,
+  zh-advisor: none, en-advisor: none,
   date: [#datetime.today().display("[month repr:long] [year]")]
 ) = context {
   // page before content
-  let title_en_degree = if en_degree != none { en_degree + " Thesis" } else { "" }
-  let title_zh_author = if zh_researcher != none { "研究生：" + zh_researcher } else { none }
-  let title_en_author = if en_researcher != none { "Researcher: " + en_researcher } else { none }
-  let title_zh_advisor = if zh_advisor != none { "指導教授：" + zh_advisor + " 博士" } else { none }
-  let title_en_advisor = if en_advisor != none { "Advisor: " + en_advisor + ", Ph.D." } else { none }
-  page(background: if has_watermark_background { watermark } else { none }, {
+  let title-en-degree = if en-degree != none { en-degree + " Thesis" } else { "" }
+  let title-zh-author = if zh-researcher != none { "研究生：" + zh-researcher } else { none }
+  let title-en-author = if en-researcher != none { "Researcher: " + en-researcher } else { none }
+  let title-zh-advisor = if zh-advisor != none { "指導教授：" + zh-advisor + " 博士" } else { none }
+  let title-en-advisor = if en-advisor != none { "Advisor: " + en-advisor + ", Ph.D." } else { none }
+  page(background: if has-watermark-background { watermark } else { none }, {
     set align(center)
     set par(leading: 0.65em)
     set text(24pt, weight: "bold")
@@ -79,24 +79,24 @@
     // school name
     // department & degree
     {
-      strong(text(24pt, zh_department))
+      strong(text(24pt, zh-department))
       linebreak()
-      strong(text(24pt, zh_degree + "學位論文"))
+      strong(text(24pt, zh-degree + "學位論文"))
       linebreak()
-      strong(text(18pt, en_department))
+      strong(text(18pt, en-department))
       linebreak()
-      strong(text(18pt, en_degree + " Thesis"))
+      strong(text(18pt, en-degree + " Thesis"))
     }
     v(1fr)
     // title
     set par(leading: 32pt - 0.65em)
     {
-      if zh_title != none {
-        text(24pt, weight: "bold", zh_title)
+      if zh-title != none {
+        text(24pt, weight: "bold", zh-title)
         linebreak()
       }
-      if en_title != none {
-        text(20pt, weight: "bold", en_title) 
+      if en-title != none {
+        text(20pt, weight: "bold", en-title) 
       }
       linebreak()
     }
@@ -105,17 +105,17 @@
     set text(18pt)
     set par(leading: 0.65em)
     v(1fr)
-    if title_zh_author != none { title_zh_author }
+    if title-zh-author != none { title-zh-author }
     else { " " }
     linebreak()
-    if title_en_author != none { title_en_author }
+    if title-en-author != none { title-en-author }
     else { " " }
     v(1fr)
     // advisor
-    if title_zh_advisor != none { title_zh_advisor }
+    if title-zh-advisor != none { title-zh-advisor }
     else { " " }
     linebreak()
-    if title_en_advisor != none { title_en_advisor }
+    if title-en-advisor != none { title-en-advisor }
     else { " " }
     v(1fr)
     date
@@ -128,81 +128,85 @@
   // if set to true, show all page include title page and blank page
   full: true,
   // if set to true, disable title page and cover page
-  only_content: false,
+  only-content: false,
   // if write with CJK(Chinese) and trying to view preview, the CJK words is weird, you can set this to true to preview readable CJK words, but you should set this back to false to use correct font if you need to export pdf
-  disable_custom_font: false,
+  disable-custom-font: false,
   // chinese department
-  zh_department: "？？？？？系？？班",
+  zh-department: "？？？？？系？？班",
   // english department
-  en_department: "Department of ????",
+  en-department: "Department of ????",
   // chinese degree, 碩士 or 博士
-  zh_degree: "？？",
+  zh-degree: "？？",
   // english degree, Master or Ph.D. or PhD
-  en_degree: "??",
+  en-degree: "??",
   // chinese title, set none to disable
-  zh_title: none,
+  zh-title: none,
   // english title, set none to disable
-  en_title: none,
+  en-title: none,
   // chinese name, set none to disable
-  zh_researcher: none,
+  zh-researcher: none,
   // english name, set none to disable
-  en_researcher: none,
+  en-researcher: none,
   // advisor chinese name, set none to disable
-  zh_advisor: none,
+  zh-advisor: none,
   // advisor english name, set none to disable
-  en_advisor: none,
+  en-advisor: none,
   // chinese date
-  zh_date: [#minguo_year_month(datetime.today())],
+  zh-date: [#minguo-year-month(datetime.today())],
   // english date
-  en_date: [#datetime.today().display("[month repr:long] [year]")],
+  en-date: [#datetime.today().display("[month repr:long] [year]")],
   // chinese abstract content, none to disable
-  zh_abstract: none,
+  zh-abstract: none,
   // english abstract content, none to disable
-  en_abstract: none,
+  en-abstract: none,
   // chinese keywords, must set an array
-  zh_keywords: (),
+  zh-keywords: (),
   // english keywords, must set an array
-  en_keywords: (),
+  en-keywords: (),
   // acknowledgements content, set none to disable
   acknowledgements: none,
+  // appendix content, will show after reference and without page number, none to disable
+  appendix: none,
+  // appendix section numbering
+  appendix-section-numbering: "A.I.a.i.",
   // max heading level will be record in table of content
-  max_heading_record_in_toc: 3,
+  max-heading-record-in-toc: 3,
   // set true to make acknowledgements, 
   //  table of content, list of tables, and list of figures
   //  use english title
-  use_en: true,
+  use-en: true,
   // set BibTex file path, or set none to disable auto refenance
-  ref_bib: none,
+  ref-bib: none,
   // set BibTex showing style,
   // common styles: 
   // apa, ieee, mla, vancouver
-  bib_style: "apa",
+  bib-style: "apa",
   // show list of tables
-  show_lot: true,
+  show-lot: true,
   // show list of figures
-  show_lof: true,
+  show-lof: true,
   // show list of equation
-  show_loe: false,
+  show-loe: false,
   // ascii font
-  en_font: "Times New Roman",
+  en-font: "Times New Roman",
   // non-ascii font
-  zh_font: "DFKai-SB",
+  zh-font: "DFKai-SB",
   // languages
   lang: "en",
   // region
   region: "US",
   // numbering string/function for enum
-  enum_numbering: ("1.", "(1)", "i.", "(i)")
+  enum-numbering: ("1.", "(1)", "i.", "(i)")
 ) = {
   // set pdf info
-  let author = if zh_researcher != none { zh_researcher } else { en_researcher }
-  let keyword = () + en_keywords + zh_keywords
-  let title = if zh_title != none { zh_title } else { en_title }
+  let author = if not use-en { zh-researcher } else { en-researcher }
+  let keyword = () + en-keywords + zh-keywords
+  let title = if not use-en { zh-title } else { en-title }
   set document(author: author, date: datetime.today(), keywords: keyword, title: title)
   // set watermark and margin
   set page(margin: margin, background: watermark)
-  // set text font, only disable CJK font if `disable_custom_font` is true
-  let font = if disable_custom_font { (en_font) } else { (en_font, zh_font) }
+  // set text font, only disable CJK font if `disable-custom-font` is true
+  let font = if disable-custom-font { (en-font) } else { (en-font, zh-font) }
   set text(font: font, lang: lang, region: region)
   // fix cjk prunction narrowing
   show regex("[　、。〃〇〈〉《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟﹐﹑，､︑]"): it => {
@@ -212,7 +216,7 @@
   }
   // set strong force use bold
   show strong: it => text(weight: "bold", it)
-  // override original bold process
+  // override original bold process for cjk
   show text.where(weight: "bold"): it => {
     if it.text.contains(regex("[^\u0001-\u007f]")) {
       text(weight: "regular", stroke: 0.02em, it)
@@ -229,55 +233,55 @@
     text(12pt, linebreak())
   }
   show heading.where(level: 1): align.with(center)
-  show figure.where(kind: image): set figure(supplement: if use_en { "Figure" } else { "圖" })
-  show figure.where(kind: table): set figure(supplement: if use_en { "Table" } else { "表" })
+  show figure.where(kind: image): set figure(supplement: if use-en { "Figure" } else { "圖" })
+  show figure.where(kind: table): set figure(supplement: if use-en { "Table" } else { "表" })
 
-  let date = if use_en { en_date } else { zh_date }
-  if not only_content {
+  let date = if use-en { en-date } else { zh-date }
+  if not only-content {
     if full {
-      title_page(has_watermark_background: false, zh_department: zh_department,
-        en_department: en_department, zh_degree: zh_degree, en_degree: en_degree,
-        zh_title: zh_title, en_title: en_title, zh_researcher: zh_researcher,
-        en_researcher: en_researcher, zh_advisor: zh_advisor, en_advisor: en_advisor,
+      title-page(has-watermark-background: false, zh-department: zh-department,
+        en-department: en-department, zh-degree: zh-degree, en-degree: en-degree,
+        zh-title: zh-title, en-title: en-title, zh-researcher: zh-researcher,
+        en-researcher: en-researcher, zh-advisor: zh-advisor, en-advisor: en-advisor,
         date: date)
   
       page(background: none)[] // blank page
     }
   
     // cover page
-    title_page(has_watermark_background: true, zh_department: zh_department,
-      en_department: en_department, zh_degree: zh_degree, en_degree: en_degree,
-      zh_title: zh_title, en_title: en_title, zh_researcher: zh_researcher,
-      en_researcher: en_researcher, zh_advisor: zh_advisor, en_advisor: en_advisor,
+    title-page(has-watermark-background: true, zh-department: zh-department,
+      en-department: en-department, zh-degree: zh-degree, en-degree: en-degree,
+      zh-title: zh-title, en-title: en-title, zh-researcher: zh-researcher,
+      en-researcher: en-researcher, zh-advisor: zh-advisor, en-advisor: en-advisor,
       date: date)
   }
   
   counter(page).update(1)
   set page(numbering: "i")
   // abstract
-  if zh_abstract != none {
+  if zh-abstract != none {
     set par(leading: 1.5em)
     [= 摘要]
     [
-      關鍵詞：#zh_keywords.join("、")\ \
-      #par(first-line-indent: 2em, zh_abstract)
+      關鍵詞：#zh-keywords.join("、")\ \
+      #par(first-line-indent: 2em, zh-abstract)
     ]
     pagebreak()
-  } // if zh_abstract != none
+  } // if zh-abstract != none
 
-  if en_abstract != none {
+  if en-abstract != none {
     set par(leading: 1.5em)
     [= ABSTRACT]
     [
-      Keywords: #en_keywords.join(", ") \ \
-      #par(first-line-indent: 2em, en_abstract)
+      Keywords: #en-keywords.join(", ") \ \
+      #par(first-line-indent: 2em, en-abstract)
     ]
     pagebreak()
-  } // if en_abstract != none
+  } // if en-abstract != none
 
   if acknowledgements != none {
     set par(leading: 1.5em)
-    heading(if use_en [Acknowledgements] else [誌謝])
+    heading(if use-en [Acknowledgements] else [誌謝])
     set text(12pt)
     set par(first-line-indent: 2em)
     acknowledgements
@@ -285,43 +289,43 @@
   
   // toc
   page({
-    let indent_size = 2em
+    let indent-size = 2em
     set text(12pt)
-    heading(if use_en [Table Of Contents] else [目錄])
+    heading(if use-en [Table of Contents] else [目錄])
     set par(first-line-indent: 0pt, leading: 1.5em)
     outline(title: none, target: heading.where(outlined: true),
-      indent: indent_size, depth: max_heading_record_in_toc)
+      indent: indent-size, depth: max-heading-record-in-toc)
   }) // page
   
   // lot
-  if show_lot {
+  if show-lot {
     page({
       set text(12pt)
-      heading(if use_en [List of Tables] else [表目錄])
+      heading(if use-en [List of Tables] else [表目錄])
       set par(first-line-indent: 0pt, leading: 1.5em)
       outline(title: none, target: figure.where(kind: table))
     }) // page
-  } // if show_lot
+  } // if show-lot
   
   // lof
-  if show_lof {
+  if show-lof {
     page({
       set text(12pt)
-      heading(if use_en [List of Figures] else [圖目錄])
+      heading(if use-en [List of Figures] else [圖目錄])
       set par(first-line-indent: 0pt, leading: 1.5em)
       outline(title: none, target: figure.where(kind: image))
     }) // page
-  } // if show_lof
+  } // if show-lof
 
   // loe
-  if show_loe {
+  if show-loe {
     page({
       set text(12pt)
-      heading(if use_en [List of Equations] else [函數目錄])
+      heading(if use-en [List of Equations] else [函數目錄])
       set par(first-line-indent: 0pt, leading: 1.5em)
       outline(title: none, target: math.equation.where(block: true))
     }) // page
-  } // if show_loe
+  } // if show-loe
   
   // set text rule
   set text(12pt)
@@ -333,7 +337,7 @@
     }
     else {
       let l = it.pos().at(0)
-      return if use_en [Chapter #numbering("1", l)]
+      return if use-en [Chapter #numbering("1", l)]
       else [第 #numbering("一", l) 章]
     }
   }, supplement: it => {
@@ -346,16 +350,32 @@
   set math.equation(numbering: "(1)")
   set enum(full: true, numbering: (..nums) => {
     let size = nums.pos().len()
-    let numbering_idx = calc.rem(size - 1, enum_numbering.len())
-    return numbering(enum_numbering.at(numbering_idx), nums.at(-1))
+    let numbering-idx = calc.rem(size - 1, enum-numbering.len())
+    return numbering(enum-numbering.at(numbering-idx), nums.at(-1))
   })
 
   counter(page).update(1)
   page(numbering: "1")[
     #content
-    #if ref_bib != none {
+    #if ref-bib != none {
       pagebreak()
-      bibliography(ref_bib, style: bib_style, title: [Reference])
+      bibliography(ref-bib, style: bib-style, title: [Reference])
+    }
+    #if appendix != none {
+      set heading(hanging-indent: auto, numbering: (..it) => {
+        let n = it.pos()
+        if n.len() > 1 {
+          n.remove(0)
+          return numbering(appendix-section-numbering, ..n)
+        }
+        else {
+          return ""
+        }
+      })
+      show heading.where(depth: 1): set heading(numbering: none)
+      set page(numbering: "1")
+      heading(depth: 1, if use-en [Appendix] else [附錄])
+      appendix
     }
   ]
 }

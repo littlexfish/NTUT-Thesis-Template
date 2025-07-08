@@ -9,28 +9,28 @@
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-#let zh_abstract = [
-  // write Chinese abstract here or set `zh_abstract` as `none` to disable
+#let zh-abstract = [
+  // write Chinese abstract here or set `zh-abstract` as `none` to disable
   #lorem(100)
 ]
 
-#let en_abstract = [
-  // write English abstract here or set `en_abstract` as `none` to disable
+#let en-abstract = [
+  // write English abstract here or set `en-abstract` as `none` to disable
   #lorem(100)
 ]
 
-#let zh_keywords = (
+#let zh-keywords = (
   // put your thesis's Chinese keywords here as array
   "關鍵字 一", "關鍵字 二", // ...
 )
 
-#let en_keywords = (
+#let en-keywords = (
   // put your thesis's English keywords here as array
   "Keyword 1", "Keyword 2", // ...
 )
 
 #let acknowledgements = [
-  // write your acknowledgements here, you can use Chinese or English according to `use_en`
+  // write your acknowledgements here, you can use Chinese or English according to `use-en`
   #lorem(100)
 ]
 
@@ -40,71 +40,71 @@
   // if set to true, show all page include title page and blank page
   full: true,
   // if set to true, disable title page and cover page
-  only_content: false,
+  only-content: false,
   // If you use Chinese to write your thesis, you can set this to true if you need to preview, because Typst has a bug to render CJK font in preview mode, if you need to export as PDF, set this back to false.
-  disable_custom_font: false,
+  disable-custom-font: false,
   // chinese department
-  zh_department: "？？？？？系？？班",
+  zh-department: "？？？？？系？？班",
   // english department
-  en_department: "Department of ????",
+  en-department: "Department of ????",
   // chinese degree, 碩士 or 博士
-  zh_degree: "？？",
+  zh-degree: "？？",
   // english degree, Master or Ph.D. or PhD
-  en_degree: "??",
+  en-degree: "??",
   // chinese title, set none to disable
-  zh_title: "標題",
+  zh-title: "標題",
   // english title, set none to disable
-  en_title: "Title",
+  en-title: "Title",
   // chinese name, set none to disable
-  zh_researcher: "你自己",
+  zh-researcher: "你自己",
   // english name, set none to disable
-  en_researcher: "Yourself",
+  en-researcher: "Yourself",
   // advisor chinese name, set none to disable
-  zh_advisor: "指導教授",
+  zh-advisor: "指導教授",
   // advisor english name, set none to disable
-  en_advisor: "Advisor",
+  en-advisor: "Advisor",
   // chinese date
-  zh_date: [#minguo_year_month(datetime.today())],
+  zh-date: [#minguo-year-month(datetime.today())],
   // english date
-  en_date: [#datetime.today().display("[month repr:long] [year]")],
+  en-date: [#datetime.today().display("[month repr:long] [year]")],
   // chinese abstract content, none to disable
-  zh_abstract: zh_abstract,
+  zh-abstract: zh-abstract,
   // english abstract content, none to disable
-  en_abstract: en_abstract,
+  en-abstract: en-abstract,
   // chinese keywords, must set an array
-  zh_keywords: zh_keywords,
+  zh-keywords: zh-keywords,
   // english keywords, must set an array
-  en_keywords: en_keywords,
+  en-keywords: en-keywords,
   // acknowledgements content
   acknowledgements: acknowledgements,
   // max heading level will be record in table of content
-  max_heading_record_in_toc: 3,
+  max-heading-record-in-toc: 3,
   // set true to make acknowledgements, 
   //  table of content, list of tables, and list of figures
   //  use english title
-  use_en: true,
+  use-en: true,
   // set Texbib file path, or set none to disable auto refenance
-  ref_bib: "ref.bib",
+  ref-bib: "ref.bib",
   // set BibTex showing style,
   // common styles: 
   // apa, ieee, mla, vancouver
-  bib_style: "ieee",
+  bib-style: "ieee",
   // show list of tables
-  show_lot: true,
+  show-lot: true,
   // show list of figures
-  show_lof: true,
+  show-lof: true,
   // show list of equation
-  show_loe: false,
+  show-loe: false,
   // ascii font, default is "Times New Roman"
-  en_font: "Times New Roman",
+  en-font: "Times New Roman",
   // non-ascii font, default is "DFKai-SD"(標楷體)
-  zh_font: "DFKai-SB",
+  zh-font: "DFKai-SB",
   // text languages, if you write in Chinese, you can set this to "zh"
   lang: "en",
   // text region, if you write in Chinese, you should always set this to "TW" or "CN" to fix prunction render problem
   region: "US",
   // numbering string/function for enum
-  enum_numbering: ("1.", "(1)", "i.", "(i)")
+  enum-numbering: ("1.", "(1)", "i.", "(i)")
 )
 
 // put your thesis content here
@@ -176,7 +176,7 @@ $ x=(-b plus.minus sqrt(b^2-4a c))/(2a) $
   + Enum (1)
     + Enum i
       + Enum (i)
-        // + Enum ? // if you need to numbering the enum that depth more than 5, you should set `enum_numbering` in `thesis` function to support more numbering method
+        // + Enum ? // if you need to numbering the enum that depth more than 5, you should set `enum-numbering` in `thesis` function to support more numbering method
 
 ref: \
 @A \
