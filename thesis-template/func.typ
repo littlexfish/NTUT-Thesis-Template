@@ -359,7 +359,7 @@
     #content
     #if ref-bib != none {
       pagebreak()
-      bibliography(ref-bib, style: bib-style, title: [Reference])
+      bibliography(ref-bib, style: bib-style, title: if use-en [References] else [參考文獻])
     }
     #if appendix != none {
       set heading(hanging-indent: auto, numbering: (..it) => {
