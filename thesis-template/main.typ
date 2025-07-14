@@ -34,76 +34,48 @@
   #lorem(100)
 ]
 
+#let after-ref = [
+  #pagebreak()
+  = Appendix
+
+  You can put appendix here, or move `after-ref` into new file and use `#include`.
+]
 
 // set thesis information here
 #show: thesis.with(
-  // if set to true, show all page include title page and blank page
   full: true,
-  // if set to true, disable title page and cover page
   only-content: false,
-  // If you use Chinese to write your thesis, you can set this to true if you need to preview, because Typst has a bug to render CJK font in preview mode, if you need to export as PDF, set this back to false.
   disable-custom-font: false,
-  // chinese department
   zh-department: "？？？？？系？？班",
-  // english department
   en-department: "Department of ????",
-  // chinese degree, 碩士 or 博士
   zh-degree: "？？",
-  // english degree, Master or Ph.D. or PhD
   en-degree: "??",
-  // chinese title, set none to disable
   zh-title: "標題",
-  // english title, set none to disable
   en-title: "Title",
-  // chinese name, set none to disable
   zh-researcher: "你自己",
-  // english name, set none to disable
   en-researcher: "Yourself",
-  // advisor chinese name, set none to disable
   zh-advisor: "指導教授",
-  // advisor english name, set none to disable
   en-advisor: "Advisor",
-  // chinese date
   zh-date: [#minguo-year-month(datetime.today())],
-  // english date
   en-date: [#datetime.today().display("[month repr:long] [year]")],
-  // chinese abstract content, none to disable
   zh-abstract: zh-abstract,
-  // english abstract content, none to disable
   en-abstract: en-abstract,
-  // chinese keywords, must set an array
   zh-keywords: zh-keywords,
-  // english keywords, must set an array
   en-keywords: en-keywords,
-  // acknowledgements content
   acknowledgements: acknowledgements,
-  // max heading level will be record in table of content
+  after-ref: after-ref,
   max-heading-record-in-toc: 3,
-  // set true to make acknowledgements, 
-  //  table of content, list of tables, and list of figures
-  //  use english title
   use-en: true,
-  // set Texbib file path, or set none to disable auto refenance
   ref-bib: "ref.bib",
-  // set BibTex showing style,
-  // common styles: 
-  // apa, ieee, mla, vancouver
   bib-style: "ieee",
-  // show list of tables
   show-lot: true,
-  // show list of figures
   show-lof: true,
-  // show list of equation
   show-loe: false,
-  // ascii font, default is "Times New Roman"
+  figure-numbering-according-chapter: true,
   en-font: "Times New Roman",
-  // non-ascii font, default is "DFKai-SD"(標楷體)
   zh-font: "DFKai-SB",
-  // text languages, if you write in Chinese, you can set this to "zh"
   lang: "en",
-  // text region, if you write in Chinese, you should always set this to "TW" or "CN" to fix prunction render problem
   region: "US",
-  // numbering string/function for enum
   enum-numbering: ("1.", "(1)", "i.", "(i)")
 )
 
@@ -178,8 +150,14 @@ $ x=(-b plus.minus sqrt(b^2-4a c))/(2a) $
       + Enum (i)
         // + Enum ? // if you need to numbering the enum that depth more than 5, you should set `enum-numbering` in `thesis` function to support more numbering method
 
-ref: \
-@A \
-@B \
-@C \
-@D
+#par[] // force parbreak
+// Using the style "thieme" and "trends" will include multiple citations in a single bracket.
+#set cite(style: "trends")
+ref:
+@A @B, @B @C @D
+
+// Note that if you are using a different style, you must change the style back to what you are using in your thesis so that the citation style will be the same as the reference style (including the full author count, etc.).
+#set cite(style: "ieee", form: "prose")
+ref with name:
+@A proposed ...
+

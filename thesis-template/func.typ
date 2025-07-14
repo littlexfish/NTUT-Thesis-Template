@@ -165,10 +165,10 @@
   en-keywords: (),
   // acknowledgements content, set none to disable
   acknowledgements: none,
-  // appendix content, will show after reference and without page number, none to disable
-  appendix: none,
+  // after-ref content, will show after reference and with page number, none to disable, you can put appendix, mathematical symbols and formulas
+  after-ref: none,
   // appendix section numbering
-  appendix-section-numbering: "A.I.a.i.",
+  after-ref-section-numbering: "A.I.a.i.",
   // max heading level will be record in table of content
   max-heading-record-in-toc: 3,
   // set true to make acknowledgements, 
@@ -187,6 +187,8 @@
   show-lof: true,
   // show list of equation
   show-loe: false,
+  // set figure numbering will show according chapter as "1.1" instead of just only number as "1"
+  figure-numbering-according-chapter: false,
   // ascii font
   en-font: "Times New Roman",
   // non-ascii font
@@ -223,7 +225,9 @@
     }
     else { it }
   }
+  // set paragraph size
   set par(leading: 1.5em, first-line-indent: 2em, justify: true)
+  // set heading font size
   show heading: it => {
     let size = 22pt - 2pt * it.level
     text(size, it)
@@ -232,9 +236,44 @@
     }
     text(12pt, linebreak())
   }
+  // reset figure and equation counter if needed
+  show heading.where(level: 1): it => {
+    it
+    counter(math.equation).update(0)
+    if figure-numbering-according-chapter {
+      counter(figure.where(kind: image)).update(0)
+      counter(figure.where(kind: table)).update(0)
+    }
+  }
+  // align heading
   show heading.where(level: 1): align.with(center)
-  show figure.where(kind: image): set figure(supplement: if use-en { "Figure" } else { "圖" })
-  show figure.where(kind: table): set figure(supplement: if use-en { "Table" } else { "表" })
+  // set figure image
+  show figure.where(kind: image): set figure(
+    // set supplement as en or ch
+    supplement: if use-en { "Figure" } else { "圖" },
+    // set numbering according to chapter if needed
+    numbering: it => {
+      if figure-numbering-according-chapter {
+        let ch = counter(heading.where(level: 1)).get().at(0)
+        let eq-count = counter(figure.where(kind: image)).get().at(0)
+        return str(ch) + "." + str(eq-count)
+      }
+      else { return numbering("1", it) }
+    })
+  // set figure table
+  show figure.where(kind: table): set figure(
+    // set supplement as en or ch
+    supplement: if use-en { "Table" } else { "表" },
+    // set numbering according to chapter if needed
+    numbering: it => {
+      if figure-numbering-according-chapter {
+        let ch = counter(heading.where(level: 1)).get().at(0)
+        let eq-count = counter(figure.where(kind: table)).get().at(0)
+        return str(ch) + "." + str(eq-count)
+      }
+      else { return numbering("1", it) }
+    })
+
 
   let date = if use-en { en-date } else { zh-date }
   if not only-content {
@@ -255,7 +294,8 @@
       en-researcher: en-researcher, zh-advisor: zh-advisor, en-advisor: en-advisor,
       date: date)
   }
-  
+
+  // update page number
   counter(page).update(1)
   set page(numbering: "i")
   // abstract
@@ -343,17 +383,25 @@
   }, supplement: it => {
     // here set to none because numbering in h1 already have "Chapter N"
     return if it.depth == 1 { none }
-    else { "Section" }
+    // In Chinese, there are multiple ways to refer to a section. Therefore, we don't provide supplements when use-en is true.
+    else { if use-en [Section] else { none } }
   })
   // set table in figure will show caption on top of table
   show figure.where(kind: table): set figure.caption(position: top)
-  set math.equation(numbering: "(1)")
+  // set equation numbering will contain chapter
+  set math.equation(numbering: it => {
+    let ch = counter(heading.where(level: 1)).get().at(0)
+    let eq-count = counter(math.equation).get().at(0)
+    return "(" + str(ch) + "." + str(eq-count) + ")"
+  })
+  // set enum numbering
   set enum(full: true, numbering: (..nums) => {
     let size = nums.pos().len()
     let numbering-idx = calc.rem(size - 1, enum-numbering.len())
     return numbering(enum-numbering.at(numbering-idx), nums.at(-1))
   })
 
+  // update page number
   counter(page).update(1)
   page(numbering: "1")[
     #content
@@ -361,21 +409,22 @@
       pagebreak()
       bibliography(ref-bib, style: bib-style, title: if use-en [References] else [參考文獻])
     }
-    #if appendix != none {
-      set heading(hanging-indent: auto, numbering: (..it) => {
+    // content after reference
+    #if after-ref != none {
+      // set heading numbering
+      set heading(numbering: (..it) => {
         let n = it.pos()
         if n.len() > 1 {
           n.remove(0)
-          return numbering(appendix-section-numbering, ..n)
+          return numbering(after-ref-section-numbering, ..n)
         }
         else {
           return ""
         }
       })
-      show heading.where(depth: 1): set heading(numbering: none)
-      set page(numbering: "1")
-      heading(depth: 1, if use-en [Appendix] else [附錄])
-      appendix
+      // remove h1 numbering, because appendix didn't need numbering, and prevent a space before title
+      show heading.where(level: 1): set heading(numbering: none)
+      after-ref
     }
   ]
 }
