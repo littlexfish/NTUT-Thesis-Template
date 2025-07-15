@@ -302,20 +302,24 @@
   if zh-abstract != none {
     set par(leading: 1.5em)
     [= 摘要]
-    [
-      關鍵詞：#zh-keywords.join("、")\ \
-      #par(first-line-indent: 2em, zh-abstract)
+    par(first-line-indent: 0pt)[
+      關鍵詞：#zh-keywords.join("、")
     ]
+    linebreak()
+    set par(first-line-indent: 2em, spacing: 1.5em)
+    zh-abstract
     pagebreak()
   } // if zh-abstract != none
 
   if en-abstract != none {
     set par(leading: 1.5em)
     [= ABSTRACT]
-    [
-      Keywords: #en-keywords.join(", ") \ \
-      #par(first-line-indent: 2em, en-abstract)
+    par(first-line-indent: 0pt)[
+      Keywords: #en-keywords.join(", ")
     ]
+    linebreak()
+    set par(first-line-indent: 2em, spacing: 1.5em)
+    en-abstract
     pagebreak()
   } // if en-abstract != none
 
