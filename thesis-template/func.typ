@@ -89,8 +89,8 @@
     }
     v(1fr)
     // title
-    set par(leading: 32pt - 0.65em)
     {
+      set par(leading: 32pt - 0.65em)
       if zh-title != none {
         text(24pt, weight: "bold", zh-title)
         linebreak()
@@ -103,7 +103,7 @@
     v(1fr)
     // researcher
     set text(18pt)
-    set par(leading: 0.65em)
+    set par(leading: 18pt)
     v(1fr)
     if title-zh-author != none { title-zh-author }
     else { " " }
@@ -119,6 +119,7 @@
     else { " " }
     v(1fr)
     date
+    v(1fr)
   }) // page
 }
 
@@ -226,7 +227,7 @@
     else { it }
   }
   // set paragraph size
-  set par(leading: 1.5em, first-line-indent: 2em, justify: true)
+  set par(leading: 1.5em, spacing: 1.5em, first-line-indent: 2em, justify: true)
   // set heading font size
   show heading: it => {
     let size = 22pt - 2pt * it.level
@@ -327,7 +328,7 @@
     set par(leading: 1.5em)
     heading(if use-en [Acknowledgements] else [誌謝])
     set text(12pt)
-    set par(first-line-indent: 2em)
+    set par(first-line-indent: 2em, spacing: 1.5em)
     acknowledgements
   }
   
@@ -336,7 +337,7 @@
     let indent-size = 2em
     set text(12pt)
     heading(if use-en [Table of Contents] else [目錄])
-    set par(first-line-indent: 0pt, leading: 1.5em)
+    set par(first-line-indent: 0pt, leading: 1.5em, spacing: 1.5em)
     outline(title: none, target: heading.where(outlined: true),
       indent: indent-size, depth: max-heading-record-in-toc)
   }) // page
@@ -346,7 +347,7 @@
     page({
       set text(12pt)
       heading(if use-en [List of Tables] else [表目錄])
-      set par(first-line-indent: 0pt, leading: 1.5em)
+      set par(first-line-indent: 0pt, leading: 1.5em, spacing: 1.5em)
       outline(title: none, target: figure.where(kind: table))
     }) // page
   } // if show-lot
@@ -356,7 +357,7 @@
     page({
       set text(12pt)
       heading(if use-en [List of Figures] else [圖目錄])
-      set par(first-line-indent: 0pt, leading: 1.5em)
+      set par(first-line-indent: 0pt, leading: 1.5em, spacing: 1.5em)
       outline(title: none, target: figure.where(kind: image))
     }) // page
   } // if show-lof
@@ -366,7 +367,7 @@
     page({
       set text(12pt)
       heading(if use-en [List of Equations] else [函數目錄])
-      set par(first-line-indent: 0pt, leading: 1.5em)
+      set par(first-line-indent: 0pt, leading: 1.5em, spacing: 1.5em)
       outline(title: none, target: math.equation.where(block: true))
     }) // page
   } // if show-loe
