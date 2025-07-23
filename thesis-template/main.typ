@@ -9,6 +9,15 @@
 //                                                       //
 ///////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////
+//                                                              //
+// Known Issue:                                                 //
+//   `en-title` in `print-info` have bugs                       //
+//   that cannot justify in spine page.                         //
+// https://github.com/littlexfish/NTUT-Thesis-Template/issues/1 //
+//                                                              //
+//////////////////////////////////////////////////////////////////
+
 #let zh-abstract = [
   // write Chinese abstract here or set `zh-abstract` as `none` to disable
   #lorem(100)
@@ -41,9 +50,17 @@
   You can put appendix here, or move `after-ref` into new file and use `#include`.
 ]
 
+#let print-info = (
+  en-title: false,
+  en-researcher-name: false,
+  department-text-size: 12pt,
+  title-text-size: 12pt,
+)
+
 // set thesis information here
 #show: thesis.with(
-  full: true,
+  print-mode: true,
+  print-info: print-info,
   only-content: false,
   disable-custom-font: false,
   zh-department: "？？？？？系？？班",
@@ -51,7 +68,7 @@
   zh-degree: "？？",
   en-degree: "??",
   zh-title: "標題",
-  en-title: "Title",
+  en-title: "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
   zh-researcher: "你自己",
   en-researcher: "Yourself",
   zh-advisor: "指導教授",

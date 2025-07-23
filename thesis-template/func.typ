@@ -4,6 +4,77 @@
 #let A4-content-size = (width: 210mm - 5cm, height: 297mm - 5.25cm)
 #let watermark = image("logo/watermark.png", width: 64%)
 
+#let zh-vertical(
+  string: "",
+  justify: false
+) = {
+  let spl = string.split("").filter(it => it != "")
+    .map(it => box(width: 1em, height: 1em, rotate(-90deg, reflow: true, origin: center, it)))
+  set align(left)
+  if justify {
+    spl = spl.join(h(1fr))
+  }
+  else {
+    spl = spl.join()
+  }
+  set par(leading: 2pt)
+  rotate(90deg, reflow: true, block(spl))
+}
+
+#let cover(
+  zh-department: "",
+  zh-degree: "",
+  title: "",
+  title-is-en: false,
+  researcher: "",
+  researcher-is-en: false,
+  department-text-size: 12pt,
+  title-text-size: 12pt,
+) = {
+  set page(margin: 0pt, background: none)
+  set par(justify: true, leading: 0.2em)
+  set text(12pt)
+  
+  let name = {
+    set text(lang: "zh", region: "TW")
+    if researcher-is-en {
+      block(zh-vertical(string: "研究生："))
+      v(-1.5em) // force move closer
+      rotate(90deg, reflow: true, text(12pt, researcher))
+    }
+    else {
+      block(zh-vertical(string: "研究生：" + researcher))
+    }
+  }
+  let title-element = if title-is-en {
+    set text(title-text-size)
+    set par(justify: true) // FIXME: why title cannot be paragraph
+    rotate(90deg, reflow: true, origin: center,
+      title.split("").filter(it => it != "").join(h(1fr)))
+  }
+  else {
+    block(zh-vertical(string: title, justify: true))
+  }
+  
+  let t = grid(columns: auto, rows: (2.5cm, 4.5cm, 0.4cm, 3.2cm, 0.4cm, 8.5cm, 0.5cm, auto),
+    align: center, stroke: 0pt,
+    [],
+    grid(columns: (1em, 1em), column-gutter: 0.2em,
+      align: center,
+      zh-vertical(string: zh-department, justify: true),
+      zh-vertical(string: "國立臺北科技大學", justify: true),
+    ),
+    [], (zh-degree + "論文").split("").filter(it => it != "").join(v(1fr)), [],
+    title-element,
+    [], name
+  )
+  
+  grid(
+    columns: (1fr, auto, 2fr),
+    [], t, []
+  )
+}
+
 #let zh-date(
   datetime,
   use-roc-year: true,
@@ -127,8 +198,10 @@
 #let thesis(
   // thesis content
   content,
-  // if set to true, show all page include title page and blank page
-  full: true,
+  // if set to true, show all page should print
+  print-mode: true,
+  // the print information for showing print page
+  print-info: (:),
   // if set to true, disable title page and cover page
   only-content: false,
   // if write with CJK(Chinese) and trying to view preview, the CJK words is weird, you can set this to true to preview readable CJK words, but you should set this back to false to use correct font if you need to export pdf
@@ -279,7 +352,19 @@
 
   let date = if use-en { en-date } else { zh-date }
   if not only-content {
-    if full {
+    if print-mode {
+      let print-title-en = print-info.at("en-title", default: false)
+      let print-researcher-en = print-info.at("en-researcher-name", default: false)
+      cover(
+        zh-department: zh-department,
+        zh-degree: zh-degree,
+        title: if print-title-en { en-title } else { zh-title },
+        title-is-en: print-title-en,
+        researcher: if print-researcher-en { en-researcher } else { zh-researcher },
+        researcher-is-en: print-researcher-en,
+        department-text-size: print-info.at("department-text-size", default: 12pt),
+        title-text-size: print-info.at("title-text-size", default: 12pt),
+      )
       title-page(has-watermark-background: false, zh-department: zh-department,
         en-department: en-department, zh-degree: zh-degree, en-degree: en-degree,
         zh-title: zh-title, en-title: en-title, zh-researcher: zh-researcher,
@@ -433,7 +518,7 @@
       after-ref
     }
   ]
-  if not only-content and full {
+  if not only-content and print-mode {
     page(background: none, numbering: none)[]
   }
 }
