@@ -94,7 +94,7 @@ $ sin alpha plus.minus sin beta=2sin 1/2 (alpha plus.minus beta) cos 1/2 (alpha 
 #lorem(20) (@BBB)
 
 #figure(
-  image("logo/ntut-logo-with-label.png", width: 80%),
+  image("logo/ntut-logo-with-label.jpg", width: 80%),
   caption: "Figure Example BBB."
 ) <BBB>
 
@@ -134,7 +134,7 @@ In @C2-1, ...
   block(fill: luma(230),
     inset: 1em,
     radius: 0.5em,
-    image("logo/ntut-logo-with-label.png", width: 80%)
+    image("logo/ntut-logo-with-label.jpg", width: 80%)
   ),
   kind: image,
   caption: "Figure Example DDD."

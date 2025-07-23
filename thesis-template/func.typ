@@ -75,10 +75,11 @@
     set align(center)
     set par(leading: 0.65em)
     set text(24pt, weight: "bold")
-    align(center, image("logo/ntut-logo-with-label.png", width: 13cm))
+    align(center, image("logo/ntut-logo-with-label.jpg", width: 13cm))
     // school name
     // department & degree
     {
+      v(-1em)
       strong(text(24pt, zh-department))
       linebreak()
       strong(text(24pt, zh-degree + "學位論文"))
@@ -432,4 +433,7 @@
       after-ref
     }
   ]
+  if not only-content and full {
+    page(background: none, numbering: none)[]
+  }
 }
