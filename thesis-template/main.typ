@@ -9,15 +9,6 @@
 //                                                       //
 ///////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-// Known Issue:                                                 //
-//   `en-title` in `print-info` have bugs                       //
-//   that cannot justify in spine page.                         //
-// https://github.com/littlexfish/NTUT-Thesis-Template/issues/1 //
-//                                                              //
-//////////////////////////////////////////////////////////////////
-
 #let zh-abstract = [
   // write Chinese abstract here or set `zh-abstract` as `none` to disable
   #lorem(100)
@@ -51,7 +42,7 @@
 ]
 
 #let print-info = (
-  en-title: false,
+  en-title: true,
   en-researcher-name: false,
   department-text-size: 12pt,
   title-text-size: 12pt,

@@ -48,9 +48,7 @@
   }
   let title-element = if title-is-en {
     set text(title-text-size)
-    set par(justify: true) // FIXME: why title cannot be paragraph
-    rotate(90deg, reflow: true, origin: center,
-      title.split("").filter(it => it != "").join(h(1fr)))
+    rotate(90deg, reflow: true, title)
   }
   else {
     block(zh-vertical(string: title, justify: true))
